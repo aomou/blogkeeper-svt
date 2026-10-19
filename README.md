@@ -4,7 +4,7 @@
 
 網址:https://blogkeeper.afmo.cc
 
-目前進度:Phase 1 階段二(部署與網域)。CMS、OAuth 尚未加入。
+目前進度:Phase 1 階段二完成(已部署,試用期間以 Cloudflare Access 保護)。下一步:階段三 CMS。
 
 ## 開發
 
