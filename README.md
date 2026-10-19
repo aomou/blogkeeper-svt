@@ -2,7 +2,9 @@
 
 部落格架構的 Sveltia 路線(svt)。Astro 靜態網站,文章與圖片都在這個 repo。架構與決策見 [aomou/blogkeeper](https://github.com/aomou/blogkeeper)。
 
-目前進度:Phase 1 階段一(網站骨架)。CMS、OAuth、部署尚未加入。
+網址:https://blogkeeper.afmo.cc
+
+目前進度:Phase 1 階段二(部署與網域)。CMS、OAuth 尚未加入。
 
 ## 開發
 
@@ -12,7 +14,12 @@
 npm ci          # 依 lockfile 安裝
 npm run dev     # 本機預覽 http://localhost:4321
 npm run build   # 輸出至 dist/
+npx wrangler dev   # 以 Cloudflare 的執行環境在本機預覽 dist/
 ```
+
+部署由 Cloudflare Workers Builds 在 main 更新時自動執行(`npm run build` → `npx wrangler deploy`),設定在 `wrangler.jsonc`。
+
+`package.json` 的 `allowScripts` 綁定了 esbuild 與 workerd 的版本;升級後執行 `npm install-scripts approve esbuild workerd` 重新批准。
 
 ## 站台專屬檔案
 

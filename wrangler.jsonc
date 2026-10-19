@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "blogkeeper-svt",
+  "compatibility_date": "2026-10-12",
+  // 純靜態網站:只託管 Astro build 的輸出,沒有 Worker 程式
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  // 自訂網域;DNS 紀錄與 SSL 憑證由 Cloudflare 自動建立
+  "routes": [
+    { "pattern": "blogkeeper.afmo.cc", "custom_domain": true }
+  ]
+}

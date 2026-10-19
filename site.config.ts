@@ -3,7 +3,7 @@ export const siteConfig = {
   title: '我的部落格',
   description: '圖文部落格',
   // 正式網址,sitemap、RSS、OG 圖的絕對網址都由此產生
-  url: 'https://example.com',
+  url: 'https://blogkeeper.afmo.cc',
   lang: 'zh-Hant-TW',
   timeZone: 'Asia/Taipei',
   // 文章沒有 cover 時使用的分享預覽圖,放在 public/
