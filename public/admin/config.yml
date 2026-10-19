@@ -1,0 +1,81 @@
+# Sveltia CMS 設定(鎖定 0.248.0,見 index.html)
+# 選項說明:https://sveltiacms.app/en/docs
+
+backend:
+  name: github
+  repo: aomou/blogkeeper-svt
+  branch: main
+  base_url: https://auth.afmo.cc # sveltia-cms-auth Worker
+
+# 儲存 = commit 至該篇的分支;於看板發布才合併進 main(ADR-0005)
+# 只有站主一人,拿掉「審核中」階段
+publish_mode:
+  type: editorial_workflow
+  stages: [draft, pending_publish]
+
+site_url: https://blogkeeper.afmo.cc
+app_title: 後台
+
+# 集中圖庫;上傳時轉 WebP、長邊最多 2048px(ADR-0002)
+media_folder: src/assets/uploads
+media_libraries:
+  default:
+    config:
+      # 檔名改成「文章網址-亂碼」,避免中文檔名和重名
+      filename_template: '{{slug}}-{{uuid_short}}'
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2048
+          height: 2048
+
+slug:
+  encoding: ascii
+  timezone: local
+
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: src/content/posts
+    path: '{{slug}}/index'
+    extension: md
+    format: frontmatter
+    create: true
+    # 圖片存到集中圖庫,文章內以相對路徑引用,交給 Astro 處理
+    media_folder: /src/assets/uploads
+    public_folder: ../../../assets/uploads
+    slug:
+      template: '{{year}}-{{month}}-{{day}}'
+      editable: [create]
+      hint: 文章網址的最後一段,發布後不能改。只能用小寫英文、數字和 -,例如 tokyo-trip。不填就用今天日期。
+      pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', '只能用小寫英文、數字和 -,開頭結尾不能是 -']
+    sortable_fields:
+      fields: [date, title]
+      default:
+        field: date
+        direction: descending
+    summary: '{{date}} {{title}}'
+    fields:
+      - name: title
+        label: 標題
+        widget: string
+      - name: date
+        label: 日期
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        default: '{{now}}'
+      - name: cover
+        label: 封面
+        widget: image
+        required: false
+        hint: 同時作為分享到社群時的預覽圖
+      - name: tags
+        label: 標籤
+        widget: list
+        required: false
+      - name: body
+        label: 內文
+        widget: markdown
