@@ -1,0 +1,32 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, postUrl, formatDate, tagSlug, type Post } from '../../lib/posts.ts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  const groups = new Map<string, { name: string; posts: Post[] }>();
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      const slug = tagSlug(tag);
+      const group = groups.get(slug) ?? { name: tag.trim(), posts: [] };
+      if (!group.posts.includes(post)) group.posts.push(post);
+      groups.set(slug, group);
+    }
+  }
+  return [...groups].map(([slug, group]) => ({ params: { tag: slug }, props: group }));
+}) satisfies GetStaticPaths;
+
+const { name, posts } = Astro.props as { name: string; posts: Post[] };
+---
+<BaseLayout title={`標籤:${name}`}>
+  <h1>標籤:{name}</h1>
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={postUrl(post)} class="post-link">{post.data.title}</a>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

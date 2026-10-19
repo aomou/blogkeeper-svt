@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts, postUrl, formatDate, excerpt } from '../lib/posts.ts';
+
+const posts = await getPosts();
+---
+<BaseLayout>
+  {posts.length === 0 && <p>還沒有文章。</p>}
+  <ul class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={postUrl(post)} class="post-link">{post.data.title}</a>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <p>{excerpt(post)}</p>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

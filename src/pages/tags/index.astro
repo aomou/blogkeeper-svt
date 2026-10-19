@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, tagSlug, tagUrl } from '../../lib/posts.ts';
+
+const posts = await getPosts();
+// 以網址相同者視為同一標籤,顯示第一次出現的寫法
+const tags = new Map<string, { name: string; count: number }>();
+for (const tag of posts.flatMap((post) => post.data.tags)) {
+  const slug = tagSlug(tag);
+  const entry = tags.get(slug) ?? { name: tag.trim(), count: 0 };
+  entry.count += 1;
+  tags.set(slug, entry);
+}
+const sorted = [...tags.values()].sort((a, b) => b.count - a.count);
+---
+<BaseLayout title="標籤">
+  <h1>標籤</h1>
+  {sorted.length === 0 && <p>還沒有標籤。</p>}
+  <ul class="tag-index">
+    {sorted.map(({ name, count }) => (
+      <li><a href={tagUrl(name)}>{name}</a> <span>({count})</span></li>
+    ))}
+  </ul>
+</BaseLayout>

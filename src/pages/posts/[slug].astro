@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, formatDate, excerpt, tagUrl, type Post } from '../../lib/posts.ts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props as { post: Post };
+const { title, date, cover, tags } = post.data;
+const { Content } = await render(post);
+
+// 分享預覽圖用 JPEG,相容性最好
+const ogImage = cover
+  ? (await getImage({ src: cover, width: 1200, format: 'jpg', layout: 'none' })).src
+  : undefined;
+---
+<BaseLayout title={title} description={excerpt(post)} ogImage={ogImage} ogType="article">
+  <article>
+    <header>
+      <h1>{title}</h1>
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      {tags.length > 0 && (
+        <ul class="tags">
+          {tags.map((tag) => <li><a href={tagUrl(tag)}>{tag}</a></li>)}
+        </ul>
+      )}
+    </header>
+    {cover && <Image src={cover} alt="" class="cover" sizes="(min-width: 42rem) 42rem, 100vw" priority />}
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

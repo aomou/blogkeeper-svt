@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../../site.config.ts';
+import { builtAt, formatDate } from '../lib/posts.ts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  // 分享預覽圖的路徑,未提供時使用站台預設圖
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  ogImage = siteConfig.defaultOgImage,
+  ogType = 'website',
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+---
+<!doctype html>
+<html lang={siteConfig.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteConfig.title} />
+    <meta property="og:title" content={title ?? siteConfig.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="site-title">{siteConfig.title}</a>
+      <nav>
+        <a href="/tags/">標籤</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>聯絡:<a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></p>
+      <p>最後更新:<time datetime={builtAt.toISOString()}>{formatDate(builtAt, true)}</time></p>
+    </footer>
+  </body>
+</html>
