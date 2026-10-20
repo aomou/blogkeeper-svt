@@ -17,7 +17,7 @@ npm run build   # 輸出至 dist/
 npx wrangler dev   # 以 Cloudflare 的執行環境在本機預覽 dist/
 ```
 
-部署由 Cloudflare Workers Builds 在 main 更新時自動執行(`npm run build` → `npx wrangler deploy`),設定在 `wrangler.jsonc`。
+部署由 Cloudflare Workers Builds 在 main 更新時自動執行(`npm run build` → `npx wrangler deploy`),設定在 `wrangler.jsonc`。Worker 的 Settings → Build 必須連接此 repo,否則 push 不會觸發 build。
 
 `package.json` 的 `allowScripts` 綁定了 esbuild 與 workerd 的版本;升級後執行 `npm install-scripts approve esbuild workerd` 重新批准。
 
