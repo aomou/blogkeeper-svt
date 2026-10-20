@@ -1,7 +1,7 @@
 ---
 title: idntt 資訊整理
 date: 2026-10-20
-cover: ''
+cover: ../../../assets/uploads/2026-10-20-202d4527065c.webp
 tags:
   - Kpop
 ---
@@ -22,6 +22,10 @@ idntt 為南韓 MODHAUS 娛樂公司於 2025 年推出的 24 人男團。
 
 販售 NFT 小卡獲得的收益會直接抽成支付給成員，不需像一般偶像要等 4-6 年直到還清製作費才能獲得收入。據[報導](https://m.entertain.naver.com/home/article/020/0003691065)，首先出道的七名成員已於 2026/01/21 獲得第一次結算。
 
+![debutconcept](../../../assets/uploads/2026-10-20-3ccfe6d61389.webp)
+
 ## Members 成員
 
 共有 24 名成員，預計會依照公開順序稱為編號 id1 \~ id24。
+
+![](../../../assets/uploads/2026-10-20-5bbc75a4ef8c.webp)
