@@ -4,7 +4,7 @@
 
 網址:https://blogkeeper.afmo.cc
 
-目前進度:Phase 1 階段三進行中。網站已部署(試用期間以 Cloudflare Access 保護),後台已加入,待測試登入。
+目前進度:Phase 1 階段三進行中。網站已部署(試用期間以 Cloudflare Access 保護),後台登入與發文流程測試通過。
 
 ## 開發
 
