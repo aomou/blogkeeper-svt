@@ -1,0 +1,39 @@
+/* 個人設計系統 v1 — 2026-11-07
+   核准的自訂屬性。字體樣式表由 BaseLayout 載入一次，這裡不再 @import。 */
+
+:root {
+  /* 中性色 */
+  --color-bg:        #f1f3f5; /* 頁面背景 */
+  --color-surface:   #fafbfc; /* 卡片、內容區 */
+  --color-border:    #e1e5ea; /* 邊框、分隔線 */
+  --color-code-bg:   #eef1f4; /* 程式碼底色 */
+  --color-text:      #3a4a5c; /* 主要文字 */
+  --color-muted:     #7b8794; /* 次要文字、日期、說明 */
+
+  /* 主色：灰藍，負責「可以點」 */
+  --color-accent:      #4a6f9a; /* 連結、按鈕、標籤文字 */
+  --color-accent-soft: #e4ebf3; /* 標籤底色、選取底色 */
+
+  /* 點綴色：黃，負責「看這裡」，少量使用 */
+  --color-highlight:      #efc35d; /* 提示框左邊框、螢光筆 */
+  --color-highlight-soft: #fbf6ea; /* 提示框底色 */
+
+  /* 字體 */
+  --font-sans: "Nunito", "Noto Sans TC", sans-serif;
+  --font-mono: Menlo, "DejaVu Sans Mono", Consolas, monospace;
+
+  /* 字級 */
+  --text-h1: 32px;
+  --text-h2: 24px;
+  --text-h3: 20px;
+  --text-body: 18px;
+  --text-small: 15px;
+  --text-caption: 13px;
+  --leading-body: 1.7;
+  --leading-heading: 1.35;
+
+  /* 版面 */
+  --content-width: 722px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
