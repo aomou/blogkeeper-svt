@@ -21,12 +21,31 @@ const {
 const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
+const pathname = Astro.url.pathname;
+const navItems = [
+  { href: '/', label: '首頁', current: pathname === '/' },
+  { href: '/tags/', label: '標籤', current: pathname.startsWith('/tags/') },
+  { href: '/posts/', label: '文章', current: pathname.startsWith('/posts/') },
+];
 ---
 <!doctype html>
 <html lang={siteConfig.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function () {
+        var theme = 'light';
+        try {
+          var stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark') theme = stored;
+          else if (matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+        } catch (e) {}
+        var root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+        root.style.colorScheme = theme;
+      })();
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -50,11 +69,94 @@ const ogImageUrl = new URL(ogImage, Astro.site);
   <body>
     <header class="site-header">
       <a href="/" class="site-title">{siteConfig.title}</a>
-      <nav>
-        <a href="/tags/">標籤</a>
-        <a href="/rss.xml">RSS</a>
+      <nav id="site-nav" class="site-nav" aria-label="主要導覽">
+        {navItems.map((item) => (
+          <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+        ))}
       </nav>
+      <div class="header-actions">
+        <button type="button" class="btn-secondary theme-toggle" id="theme-toggle" aria-label="切換色彩主題">
+          <span class="theme-to-dark">深色</span>
+          <span class="theme-to-light">淺色</span>
+        </button>
+        <button
+          type="button"
+          class="btn-secondary nav-toggle"
+          id="nav-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="開啟選單"
+        >
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        var themeToggle = document.getElementById('theme-toggle');
+        var navToggle = document.getElementById('nav-toggle');
+        var nav = document.getElementById('site-nav');
+        var narrow = matchMedia('(max-width: 40rem)');
+
+        function labelTheme(theme) {
+          themeToggle.setAttribute('aria-label', theme === 'dark' ? '切換為淺色主題' : '切換為深色主題');
+        }
+
+        function applyTheme(theme, persist) {
+          root.setAttribute('data-theme', theme);
+          root.style.colorScheme = theme;
+          if (persist) {
+            try { localStorage.setItem('theme', theme); } catch (e) {}
+          }
+          labelTheme(theme);
+        }
+
+        labelTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+        themeToggle.addEventListener('click', function () {
+          applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+        });
+
+        var scheme = matchMedia('(prefers-color-scheme: dark)');
+        function onSchemeChange(event) {
+          var stored = null;
+          try { stored = localStorage.getItem('theme'); } catch (e) {}
+          if (stored === 'light' || stored === 'dark') return;
+          applyTheme(event.matches ? 'dark' : 'light', false);
+        }
+        if (scheme.addEventListener) scheme.addEventListener('change', onSchemeChange);
+
+        function setNav(open) {
+          navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          navToggle.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+          nav.classList.toggle('is-open', open);
+        }
+
+        navToggle.addEventListener('click', function (event) {
+          var open = navToggle.getAttribute('aria-expanded') !== 'true';
+          setNav(open);
+          if (open && event.detail === 0) {
+            var first = nav.querySelector('a');
+            if (first) first.focus();
+          }
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+            setNav(false);
+            navToggle.focus();
+          }
+        });
+
+        function onNarrowChange(event) {
+          if (!event.matches) setNav(false);
+        }
+        if (narrow.addEventListener) narrow.addEventListener('change', onNarrowChange);
+
+        root.setAttribute('data-nav', 'ready');
+      })();
+    </script>
     <main>
       <slot />
     </main>
