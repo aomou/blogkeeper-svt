@@ -11,6 +11,7 @@ const posts = defineCollection({
       date: z.coerce.date(),
       cover: image().optional(),
       tags: z.array(z.string()).default([]),
+      pinned: z.boolean().default(false),
     }),
 });
 

@@ -6,6 +6,7 @@ tags:
   - 範例
   - 旅行
   - Astro
+pinned: true
 ---
 
 這是一篇欄位齊全的範例文章，包含封面、標籤與內文圖片。網址由資料夾名稱 `hello-world` 決定。

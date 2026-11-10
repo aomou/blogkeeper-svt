@@ -4,6 +4,7 @@ date: 2026-10-20
 cover: ../../../assets/uploads/2026-10-20-202d4527065c.webp
 tags:
   - Kpop
+pinned: true
 ---
 
 ## Group Info 團體介紹

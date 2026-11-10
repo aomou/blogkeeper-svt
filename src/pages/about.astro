@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../site.config.ts';
+---
+<BaseLayout title="About">
+  <h1>About</h1>
+  {siteConfig.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+  <h2 id="contact">Contact</h2>
+  <ul class="contact-list">
+    {siteConfig.about.links.map((link) => (
+      <li>
+        <span>{link.label}</span>
+        <a href={link.href}>{link.text}</a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

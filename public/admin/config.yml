@@ -76,6 +76,11 @@ collections:
         label: 標籤
         widget: list
         required: false
+      - name: pinned
+        label: Pinned
+        widget: boolean
+        default: false
+        required: false
       - name: body
         label: 內文
         widget: markdown

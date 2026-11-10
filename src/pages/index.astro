@@ -1,18 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPosts, postUrl, formatPostDate, excerpt } from '../lib/posts.ts';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts.ts';
+import { siteConfig } from '../../site.config.ts';
 
 const posts = await getPosts();
+const latest = posts.slice(0, 3);
+const pinned = posts.filter((post) => post.data.pinned);
 ---
 <BaseLayout>
-  {posts.length === 0 && <p>No posts yet.</p>}
-  <ul class="post-list">
-    {posts.map((post) => (
-      <li>
-        <a href={postUrl(post)} class="post-link">{post.data.title}</a>
-        <time datetime={post.data.date.toISOString()}>{formatPostDate(post.data.date)}</time>
-        <p>{excerpt(post)}</p>
-      </li>
-    ))}
-  </ul>
+  <p class="home-blurb">
+    {siteConfig.about.blurb}{' '}
+    <a href="/about/">{siteConfig.about.moreLabel}</a>
+  </p>
+  <section class="home-section">
+    <h2>New Posts</h2>
+    {latest.length === 0 && <p>No posts yet.</p>}
+    {latest.length > 0 && <PostList posts={latest} />}
+    {posts.length > 0 && <p class="section-more"><a href="/posts/">All posts →</a></p>}
+  </section>
+  {pinned.length > 0 && (
+    <section class="home-section">
+      <h2>Pinned</h2>
+      <PostList posts={pinned} showPin />
+    </section>
+  )}
 </BaseLayout>
