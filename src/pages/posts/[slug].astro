@@ -12,7 +12,8 @@ export const getStaticPaths = (async () => {
 
 const { post } = Astro.props as { post: Post };
 const { title, date, cover, tags } = post.data;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 
 // 分享預覽圖用 JPEG,相容性最好
 const ogImage = cover
@@ -20,19 +21,106 @@ const ogImage = cover
   : undefined;
 ---
 <BaseLayout title={title} description={excerpt(post)} ogImage={ogImage} ogType="article">
-  <article>
-    <header>
-      <h1>{title}</h1>
-      <time datetime={date.toISOString()}>{formatPostDate(date)}</time>
-      {tags.length > 0 && (
-        <ul class="tags">
-          {tags.map((tag) => <li><a href={tagUrl(tag)}>{tag}</a></li>)}
-        </ul>
-      )}
-    </header>
-    {cover && <Image src={cover} alt="" class="cover" sizes="(min-width: 754px) 722px, calc(100vw - 2rem)" priority />}
-    <div class="prose">
-      <Content />
-    </div>
-  </article>
+  <div class="post-frame">
+    <article>
+      <header>
+        <h1>{title}</h1>
+        <time datetime={date.toISOString()}>{formatPostDate(date)}</time>
+        {tags.length > 0 && (
+          <ul class="tags">
+            {tags.map((tag) => <li><a href={tagUrl(tag)}>{tag}</a></li>)}
+          </ul>
+        )}
+      </header>
+      {cover && <Image src={cover} alt="" class="cover" sizes="(min-width: 754px) 722px, calc(100vw - 2rem)" priority />}
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+    {toc.length > 0 && (
+      <nav class="toc" aria-label="Sections">
+        <div class="toc-sticky">
+          <ol>
+            {toc.map((heading) => (
+              <li>
+                <a class={heading.depth === 2 ? 'toc-h2' : 'toc-h3'} href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </nav>
+    )}
+  </div>
+  <script is:inline>
+    (function () {
+      var prose = document.querySelector('.prose');
+      if (prose) {
+        var icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+        prose.querySelectorAll('h2, h3').forEach(function (heading) {
+          if (!heading.id) return;
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'heading-link';
+          button.setAttribute('aria-label', 'Copy link to section');
+          button.innerHTML = icon;
+          var chip = document.createElement('span');
+          chip.className = 'heading-copied';
+          chip.textContent = 'Copied';
+          chip.setAttribute('role', 'status');
+          heading.append(button, chip);
+          var timer;
+          button.addEventListener('click', function () {
+            var url = location.origin + location.pathname + '#' + heading.id;
+            var done = function () {
+              history.replaceState(null, '', '#' + heading.id);
+              chip.classList.add('is-shown');
+              clearTimeout(timer);
+              timer = setTimeout(function () { chip.classList.remove('is-shown'); }, 1600);
+            };
+            var fallback = function () {
+              var area = document.createElement('textarea');
+              area.value = url;
+              area.setAttribute('readonly', '');
+              area.style.position = 'fixed';
+              area.style.left = '-9999px';
+              document.body.appendChild(area);
+              area.select();
+              document.execCommand('copy');
+              area.remove();
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(url).then(done).catch(function () { fallback(); done(); });
+            } else {
+              fallback();
+              done();
+            }
+          });
+        });
+      }
+
+      var toc = document.querySelector('.toc');
+      if (!toc) return;
+      var links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+      var sections = links.map(function (link) {
+        return document.getElementById(link.getAttribute('href').slice(1));
+      }).filter(Boolean);
+      if (!sections.length) return;
+      var activeId = sections[0].id;
+      function setActive(id) {
+        activeId = id;
+        links.forEach(function (link) {
+          link.classList.toggle('is-active', link.getAttribute('href') === '#' + id);
+        });
+      }
+      setActive(activeId);
+      if (!('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; });
+        if (!visible.length) return;
+        visible.sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+        setActive(visible[0].target.id);
+      }, { rootMargin: '0px 0px -65% 0px', threshold: 0 });
+      sections.forEach(function (section) { observer.observe(section); });
+    })();
+  </script>
 </BaseLayout>

@@ -203,6 +203,13 @@ article h1 { margin-bottom: 0.25rem; }
   line-height: var(--leading-body);
 }
 
+.prose h2,
+.prose h3 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  scroll-margin-top: 1.5rem;
+}
+
 code, pre {
   font-family: var(--font-mono);
   background: var(--color-code-bg);
@@ -260,10 +267,121 @@ mark {
 }
 
 .toc {
+  display: none;
   font-size: 14px;
   line-height: 1.6;
-  border-left: 1px solid var(--color-border);
-  padding-left: 14px;
+}
+
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc li { margin: 0.15rem 0; }
+
+.toc a {
+  position: relative;
+  display: block;
+}
+
+.toc a.toc-h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.toc a.toc-h3 {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.toc a.is-active { color: var(--color-accent); }
+
+.post-frame { position: relative; }
+
+.prose h2 .heading-link,
+.prose h3 .heading-link,
+.prose h2 .heading-link:hover,
+.prose h3 .heading-link:hover {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 0 0 0.35rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-muted);
+  box-shadow: none;
+  vertical-align: middle;
+  opacity: 0;
+  filter: none;
+}
+
+@media (hover: hover) {
+  .prose h2:hover .heading-link,
+  .prose h3:hover .heading-link,
+  .prose h2:focus-within .heading-link,
+  .prose h3:focus-within .heading-link {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .prose h2 .heading-link,
+  .prose h3 .heading-link {
+    opacity: 0.45;
+  }
+}
+
+.heading-copied {
+  display: none;
+  margin-left: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.heading-copied.is-shown { display: inline-block; }
+
+@media (min-width: 64rem) {
+  .toc { display: block; }
+
+  .toc {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 1.25rem);
+    width: min(11rem, calc(50vw - var(--content-width) / 2 - 2.5rem));
+  }
+
+  .toc-sticky {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100vh - 3rem);
+    overflow: auto;
+    border-left: 1px solid var(--color-border);
+    padding-left: 14px;
+  }
+
+  .toc a.is-active::before {
+    content: "";
+    position: absolute;
+    left: calc(-14px - 1px);
+    top: 0.15em;
+    bottom: 0.15em;
+    width: 2px;
+    background: var(--color-accent);
+  }
 }
 
 button,
@@ -301,9 +419,9 @@ button:disabled,
 }
 
 /* 深色主按鈕：灰藍底、頁面底色字。淺色主按鈕維持白字。 */
-[data-theme="dark"] button:not(.btn-secondary):not(.theme-toggle),
-[data-theme="dark"] .btn:not(.btn-secondary):not(.theme-toggle),
-[data-theme="dark"] a.btn:not(.btn-secondary):not(.theme-toggle) {
+[data-theme="dark"] button:not(.btn-secondary):not(.theme-toggle):not(.heading-link),
+[data-theme="dark"] .btn:not(.btn-secondary):not(.theme-toggle):not(.heading-link),
+[data-theme="dark"] a.btn:not(.btn-secondary):not(.theme-toggle):not(.heading-link) {
   background: var(--color-accent);
   color: var(--color-bg);
 }
