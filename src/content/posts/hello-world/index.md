@@ -12,7 +12,7 @@ tags:
 
 ## 內文圖片
 
-圖片放在集中圖庫 `src/assets/uploads/`，文章以相對路徑引用,build 時會自動產生多種尺寸。
+圖片放在集中圖庫 `src/assets/uploads/`，文章以相對路徑引用，build 時會自動產生多種尺寸。
 
 ![範例圖片](../../../assets/uploads/sample-inline.webp)
 
