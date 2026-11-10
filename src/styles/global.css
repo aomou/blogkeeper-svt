@@ -198,6 +198,8 @@ article h1 { margin-bottom: 0.25rem; }
 .cover,
 .prose img { border-radius: var(--radius); }
 
+.prose img { display: block; }
+
 .prose {
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -206,9 +208,19 @@ article h1 { margin-bottom: 0.25rem; }
 .prose h2,
 .prose h3 {
   margin-top: 1em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.75em;
   scroll-margin-top: 1.5rem;
 }
+
+.prose :is(h2, h3) + * { margin-top: 0; }
+
+.prose p:has(> img:only-child) {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+/* Higher specificity than the image-paragraph rule, so a heading's 0.75em bottom gap stays the space above a following image. */
+.prose :is(h2, h3) + p:has(> img:only-child) { margin-top: 0; }
 
 code, pre {
   font-family: var(--font-mono);
