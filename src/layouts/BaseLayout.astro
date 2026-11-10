@@ -159,6 +159,17 @@ const navItems = [
           }
         });
 
+        nav.addEventListener('click', function (event) {
+          var link = event.target.closest && event.target.closest('a');
+          if (link && nav.contains(link)) setNav(false);
+        });
+
+        document.addEventListener('click', function (event) {
+          if (navToggle.getAttribute('aria-expanded') !== 'true') return;
+          if (nav.contains(event.target) || navToggle.contains(event.target)) return;
+          setNav(false);
+        });
+
         document.addEventListener('keydown', function (event) {
           if (event.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
             setNav(false);
