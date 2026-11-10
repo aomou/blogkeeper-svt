@@ -19,8 +19,8 @@ export const getStaticPaths = (async () => {
 
 const { name, posts } = Astro.props as { name: string; posts: Post[] };
 ---
-<BaseLayout title={`標籤:${name}`}>
-  <h1>標籤:{name}</h1>
+<BaseLayout title={`Tag: ${name}`}>
+  <h1>Tag: {name}</h1>
   <ul class="post-list">
     {posts.map((post) => (
       <li>

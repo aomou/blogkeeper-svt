@@ -301,9 +301,9 @@ button:disabled,
 }
 
 /* 深色主按鈕：灰藍底、頁面底色字。淺色主按鈕維持白字。 */
-[data-theme="dark"] button:not(.btn-secondary),
-[data-theme="dark"] .btn:not(.btn-secondary),
-[data-theme="dark"] a.btn:not(.btn-secondary) {
+[data-theme="dark"] button:not(.btn-secondary):not(.theme-toggle),
+[data-theme="dark"] .btn:not(.btn-secondary):not(.theme-toggle),
+[data-theme="dark"] a.btn:not(.btn-secondary):not(.theme-toggle) {
   background: var(--color-accent);
   color: var(--color-bg);
 }
@@ -362,13 +362,30 @@ a.btn-secondary:hover {
 
 .site-footer p { margin: 0.25rem 0; }
 
-button.theme-toggle,
 button.nav-toggle {
   position: relative;
   width: 2.5rem;
   height: 2.5rem;
   padding: 0;
   flex-shrink: 0;
+}
+
+button.theme-toggle,
+button.theme-toggle:hover {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--color-accent);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+button.theme-toggle:hover {
+  filter: none;
 }
 
 /* 手機寬度直接收合,不靠 JS 加上的屬性。放在 button { display } 之後,避免被蓋掉。 */

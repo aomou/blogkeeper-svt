@@ -83,7 +83,7 @@ const navItems = [
         ))}
       </nav>
       <div class="header-actions">
-        <button type="button" class="btn-secondary theme-toggle" id="theme-toggle" aria-label="切換色彩主題">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch color theme">
           <span class="theme-icon">
             <svg class="theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z" />
@@ -102,7 +102,7 @@ const navItems = [
           id="nav-toggle"
           aria-expanded="false"
           aria-controls="site-nav"
-          aria-label="開啟選單"
+          aria-label="Open menu"
         >
           <span class="nav-toggle-bars" aria-hidden="true"></span>
         </button>
@@ -117,7 +117,7 @@ const navItems = [
         var narrow = matchMedia('(max-width: 40rem)');
 
         function labelTheme(theme) {
-          themeToggle.setAttribute('aria-label', theme === 'dark' ? '切換為淺色主題' : '切換為深色主題');
+          themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
         }
 
         function applyTheme(theme, persist) {
@@ -146,7 +146,7 @@ const navItems = [
 
         function setNav(open) {
           navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-          navToggle.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+          navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
           nav.classList.toggle('is-open', open);
         }
 
@@ -176,8 +176,8 @@ const navItems = [
       <slot />
     </main>
     <footer class="site-footer">
-      <p>聯絡:<a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></p>
-      <p>最後更新:<time datetime={builtAt.toISOString()}>{formatDate(builtAt)}</time></p>
+      <p>Contact: <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></p>
+      <p>Last updated: <time datetime={builtAt.toISOString()}>{formatDate(builtAt)}</time></p>
     </footer>
   </body>
 </html>
