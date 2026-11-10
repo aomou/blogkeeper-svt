@@ -24,8 +24,9 @@ const ogImageUrl = new URL(ogImage, Astro.site);
 const pathname = Astro.url.pathname;
 const navItems = [
   { href: '/', label: 'Home', current: pathname === '/' },
-  { href: '/tags/', label: 'Tags', current: pathname.startsWith('/tags/') },
   { href: '/posts/', label: 'Posts', current: pathname.startsWith('/posts/') },
+  { href: '/tags/', label: 'Tags', current: pathname.startsWith('/tags/') },
+  { href: '/about/', label: 'About', current: pathname.startsWith('/about/') },
 ];
 ---
 <!doctype html>
@@ -79,7 +80,7 @@ const navItems = [
       <a href="/" class="site-title">{siteConfig.title}</a>
       <nav id="site-nav" class="site-nav" aria-label="Main">
         {navItems.map((item) => (
-          <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+          <a href={item.href} aria-current={item.current ? 'page' : undefined}><span>{item.label}</span></a>
         ))}
       </nav>
       <div class="header-actions">
