@@ -13,9 +13,9 @@ for (const tag of posts.flatMap((post) => post.data.tags)) {
 }
 const sorted = [...tags.values()].sort((a, b) => b.count - a.count);
 ---
-<BaseLayout title="標籤">
-  <h1>標籤</h1>
-  {sorted.length === 0 && <p>還沒有標籤。</p>}
+<BaseLayout title="Tags">
+  <h1>Tags</h1>
+  {sorted.length === 0 && <p>No tags yet.</p>}
   <ul class="tag-index">
     {sorted.map(({ name, count }) => (
       <li><a href={tagUrl(name)}>{name}</a> <span>({count})</span></li>

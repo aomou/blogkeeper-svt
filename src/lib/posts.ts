@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { siteConfig } from '../../site.config.ts';
+
+export { formatDate, formatPostDate } from './dates.ts';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -22,14 +23,6 @@ export function tagSlug(tag: string): string {
 
 export function tagUrl(tag: string): string {
   return `/tags/${tagSlug(tag)}/`;
-}
-
-export function formatDate(date: Date, withTime = false): string {
-  return new Intl.DateTimeFormat(siteConfig.lang, {
-    timeZone: siteConfig.timeZone,
-    dateStyle: 'medium',
-    ...(withTime ? { timeStyle: 'short' } : {}),
-  }).format(date);
 }
 
 // 取 Markdown 原文的第一個一般段落,作為摘要與 meta description
