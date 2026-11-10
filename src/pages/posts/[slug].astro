@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPosts, formatDate, excerpt, tagUrl, type Post } from '../../lib/posts.ts';
+import { getPosts, formatPostDate, excerpt, tagUrl, type Post } from '../../lib/posts.ts';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
@@ -23,7 +23,7 @@ const ogImage = cover
   <article>
     <header>
       <h1>{title}</h1>
-      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      <time datetime={date.toISOString()}>{formatPostDate(date)}</time>
       {tags.length > 0 && (
         <ul class="tags">
           {tags.map((tag) => <li><a href={tagUrl(tag)}>{tag}</a></li>)}

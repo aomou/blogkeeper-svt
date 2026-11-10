@@ -23,9 +23,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 const pathname = Astro.url.pathname;
 const navItems = [
-  { href: '/', label: '首頁', current: pathname === '/' },
-  { href: '/tags/', label: '標籤', current: pathname.startsWith('/tags/') },
-  { href: '/posts/', label: '文章', current: pathname.startsWith('/posts/') },
+  { href: '/', label: 'Home', current: pathname === '/' },
+  { href: '/tags/', label: 'Tags', current: pathname.startsWith('/tags/') },
+  { href: '/posts/', label: 'Posts', current: pathname.startsWith('/posts/') },
 ];
 ---
 <!doctype html>
@@ -33,7 +33,15 @@ const navItems = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>
+    <noscript>
+      <style>
+        @media (max-width: 40rem) {
+          #site-nav { display: flex !important; flex-direction: row; flex-basis: auto; order: 0; }
+          #nav-toggle { display: none !important; }
+        }
+      </style>
+    </noscript>
+    <script is:inline data-cfasync="false">
       (function () {
         var theme = 'light';
         try {
@@ -69,15 +77,24 @@ const navItems = [
   <body>
     <header class="site-header">
       <a href="/" class="site-title">{siteConfig.title}</a>
-      <nav id="site-nav" class="site-nav" aria-label="主要導覽">
+      <nav id="site-nav" class="site-nav" aria-label="Main">
         {navItems.map((item) => (
           <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
         ))}
       </nav>
       <div class="header-actions">
         <button type="button" class="btn-secondary theme-toggle" id="theme-toggle" aria-label="切換色彩主題">
-          <span class="theme-to-dark">深色</span>
-          <span class="theme-to-light">淺色</span>
+          <span class="theme-icon">
+            <svg class="theme-icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z" />
+            </svg>
+            <svg class="theme-icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" fill="currentColor" />
+              <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M12 2.5v2.2M12 19.3v2.2M4.8 4.8l1.6 1.6M17.6 17.6l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.8 19.2l1.6-1.6M17.6 6.4l1.6-1.6" />
+              </g>
+            </svg>
+          </span>
         </button>
         <button
           type="button"
@@ -91,7 +108,7 @@ const navItems = [
         </button>
       </div>
     </header>
-    <script is:inline>
+    <script is:inline data-cfasync="false">
       (function () {
         var root = document.documentElement;
         var themeToggle = document.getElementById('theme-toggle');
@@ -153,8 +170,6 @@ const navItems = [
           if (!event.matches) setNav(false);
         }
         if (narrow.addEventListener) narrow.addEventListener('change', onNarrowChange);
-
-        root.setAttribute('data-nav', 'ready');
       })();
     </script>
     <main>
@@ -162,7 +177,7 @@ const navItems = [
     </main>
     <footer class="site-footer">
       <p>聯絡:<a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></p>
-      <p>最後更新:<time datetime={builtAt.toISOString()}>{formatDate(builtAt, true)}</time></p>
+      <p>最後更新:<time datetime={builtAt.toISOString()}>{formatDate(builtAt)}</time></p>
     </footer>
   </body>
 </html>
