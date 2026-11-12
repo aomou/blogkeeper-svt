@@ -22,6 +22,9 @@ const pageTitle = title ? `${title} | ${siteConfig.title}` : siteConfig.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 const pathname = Astro.url.pathname;
+// Injected as raw HTML so Astro does not bundle or rewrite the official beacon.
+const cloudflareWebAnalytics =
+  `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ef23eb4391ef4565bea2465f68e14c6f"}'></script><!-- End Cloudflare Web Analytics -->`;
 const navItems = [
   { href: '/', label: 'Home', current: pathname === '/' },
   { href: '/posts/', label: 'Posts', current: pathname.startsWith('/posts/') },
@@ -191,5 +194,6 @@ const navItems = [
       <p>Contact: <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></p>
       <p>Last updated: <time datetime={builtAt.toISOString()}>{formatDate(builtAt)}</time></p>
     </footer>
+    <Fragment set:html={cloudflareWebAnalytics} />
   </body>
 </html>
